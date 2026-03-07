@@ -8,10 +8,11 @@ export const metadata = {
   title: "Messages - Admin",
 };
 
-export default async function MessagesPage({ searchParams }: { searchParams: { secret?: string } }) {
+export default async function MessagesPage({ searchParams }: { searchParams: Promise<{ secret?: string }> }) {
+  const params = await searchParams;
   // simple protection via query param, set ADMIN_SECRET env variable
   const secret = process.env.ADMIN_SECRET;
-  if (secret && searchParams.secret !== secret) {
+  if (secret && params.secret !== secret) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-xl font-semibold">Unauthorized</p>
@@ -33,7 +34,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: { s
       <Navigation />
       <section className="max-w-4xl mx-auto px-6 py-16">
         <h2 className="text-4xl font-bold mb-8">Received Messages</h2>
-        <MessagesViewer initialMessages={messages} secret={searchParams.secret} />
+        <MessagesViewer initialMessages={messages} secret={params.secret} />
       </section>
       <Footer />
     </div>
