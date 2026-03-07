@@ -14,6 +14,9 @@ export default function Navigation() {
           <Link href="/projects" className="hover:text-blue-600 dark:hover:text-blue-400">
             Projects
           </Link>
+          <Link href="/store" className="hover:text-blue-600 dark:hover:text-blue-400">
+            Store
+          </Link>
           <Link href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400">
             Contact
           </Link>
