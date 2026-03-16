@@ -66,6 +66,25 @@ export default function AdminLayout({
               >
                 Messages
               </Link>
+              
+              <div className="w-px h-4 bg-gray-300 dark:bg-gray-700 mx-2"></div>
+              
+              <Link
+                href="/admin/manage-projects"
+                className={`text-sm font-medium hover:text-blue-600 transition ${
+                  pathname === "/admin/manage-projects" ? "text-blue-600" : "text-gray-600 dark:text-gray-400"
+                }`}
+              >
+                Projects
+              </Link>
+              <Link
+                href="/admin/add-project"
+                className={`text-sm font-medium hover:text-blue-600 transition ${
+                  pathname === "/admin/add-project" ? "text-blue-600" : "text-gray-600 dark:text-gray-400"
+                }`}
+              >
+                Add Project
+              </Link>
             </div>
           </div>
 
