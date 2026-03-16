@@ -1,17 +1,25 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "password";
-
 export async function POST(request: Request) {
   try {
     const { username, password } = await request.json();
+
+    const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
     if (!username || !password) {
       return NextResponse.json(
         { error: "Username and password are required" },
         { status: 400 }
+      );
+    }
+
+    if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
+      console.error("Admin credentials are not configured in environment variables.");
+      return NextResponse.json(
+        { error: "Server misconfiguration." },
+        { status: 500 }
       );
     }
 
