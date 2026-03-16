@@ -16,7 +16,7 @@ export default function About() {
           With several years of experience in full-stack development, I focus on creating clean, maintainable code and delivering exceptional user experiences. I'm always eager to learn new technologies and best practices in web development.
         </p>
 
-        <div className="grid grid-cols-2 gap-8 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
           <div>
             <h3 className="text-2xl font-semibold mb-4">Skills</h3>
             <ul className="text-gray-600 dark:text-gray-400 space-y-3">
