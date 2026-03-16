@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Navigation from "../../../components/Navigation";
-import Footer from "../../../components/Footer";
 import { useRouter } from "next/navigation";
 
 export default function AddProductPage() {
@@ -72,10 +70,8 @@ export default function AddProductPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black text-black dark:text-white">
-      <Navigation />
-
-      <main className="max-w-3xl mx-auto px-6 py-20">
+    <div className="min-h-screen bg-transparent text-black dark:text-white">
+      <main className="max-w-3xl mx-auto px-6 py-12">
         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xl overflow-hidden">
           <div className="p-8 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
@@ -231,8 +227,6 @@ export default function AddProductPage() {
           </form>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

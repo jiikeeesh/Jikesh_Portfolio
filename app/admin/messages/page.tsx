@@ -1,7 +1,5 @@
 import { promises as fs } from "fs";
 import path from "path";
-import Navigation from "../../../components/Navigation";
-import Footer from "../../../components/Footer";
 import MessagesViewer from "../../../components/MessagesViewer";
 
 export const metadata = {
@@ -30,13 +28,11 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
-      <Navigation />
-      <section className="max-w-4xl mx-auto px-6 py-16">
+    <div className="min-h-screen bg-transparent text-black dark:text-white">
+      <main className="max-w-4xl mx-auto px-6 py-12">
         <h2 className="text-4xl font-bold mb-8">Received Messages</h2>
         <MessagesViewer initialMessages={messages} secret={params.secret} />
-      </section>
-      <Footer />
+      </main>
     </div>
   );
 }

@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Navigation from "../../../components/Navigation";
-import Footer from "../../../components/Footer";
 import Link from "next/navigation";
 
 interface Product {
@@ -61,10 +59,8 @@ export default function ManageProductsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black text-black dark:text-white">
-      <Navigation />
-
-      <main className="max-w-5xl mx-auto px-6 py-20">
+    <div className="min-h-screen bg-transparent text-black dark:text-white">
+      <main className="max-w-5xl mx-auto px-6 py-12">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
@@ -145,8 +141,6 @@ export default function ManageProductsPage() {
           )}
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
