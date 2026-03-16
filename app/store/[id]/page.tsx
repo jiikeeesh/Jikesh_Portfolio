@@ -105,10 +105,6 @@ export default function ProductPage() {
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold leading-tight">{product.name}</h1>
             
-            <div className="text-3xl font-black text-blue-600 dark:text-blue-400">
-              ${product.price}
-            </div>
-            
             <div className="h-px w-full bg-gray-200 dark:bg-gray-800 my-8"></div>
             
             <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed font-medium">

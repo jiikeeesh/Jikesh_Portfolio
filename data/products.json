@@ -43,5 +43,14 @@
     "icon": "🎯",
     "colors": "from-red-400 to-pink-600",
     "buttonText": "Get Started"
+  },
+  {
+    "name": "Hotwheels",
+    "description": "I sell some rare hotwheels collection. For more info contact me.",
+    "price": 10,
+    "icon": "🏎️",
+    "colors": "from-indigo-400 to-purple-600",
+    "buttonText": "Get Details",
+    "id": 6
   }
 ]
