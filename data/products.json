@@ -1,50 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Modern Web Template",
-    "description": "Professional responsive template perfect for portfolios and businesses.",
-    "price": 49,
-    "icon": "🎨",
-    "colors": "from-blue-400 to-purple-600",
-    "buttonText": "Add to Cart"
-  },
-  {
-    "id": 2,
-    "name": "Mobile App UI Kit",
-    "description": "Complete UI components for iOS and Android app development.",
-    "price": 79,
-    "icon": "📱",
-    "colors": "from-green-400 to-blue-600",
-    "buttonText": "Add to Cart"
-  },
-  {
-    "id": 3,
-    "name": "React Components Pack",
-    "description": "50+ reusable React components with TypeScript support.",
-    "price": 99,
-    "icon": "🚀",
-    "colors": "from-purple-400 to-pink-600",
-    "buttonText": "Add to Cart"
-  },
-  {
-    "id": 4,
-    "name": "Web Development Course",
-    "description": "Complete course covering HTML, CSS, JavaScript, and React.",
-    "price": 149,
-    "icon": "📚",
-    "colors": "from-yellow-400 to-orange-600",
-    "buttonText": "Add to Cart"
-  },
-  {
-    "id": 5,
-    "name": "SEO Optimization Service",
-    "description": "Professional SEO audit and optimization for your website.",
-    "price": 199,
-    "icon": "🎯",
-    "colors": "from-red-400 to-pink-600",
-    "buttonText": "Get Started"
-  },
-  {
     "name": "Hotwheels",
     "description": "I sell some rare hotwheels collection. For more info contact me.",
     "price": 10,
