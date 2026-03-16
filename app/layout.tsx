@@ -29,11 +29,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        {/* override favicon manually to force update */}
-        <link rel="icon" href="/jikesh.png" />
-        <link rel="shortcut icon" href="/jikesh.png" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
