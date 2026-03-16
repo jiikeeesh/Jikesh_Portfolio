@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { getStore } from "@netlify/blobs";
 
-const DATA_PATH = path.join(process.cwd(), "data", "messages.json");
+const STORE_NAME = "contact-messages";
+const MESSAGES_KEY = "all-messages";
 
 function checkSecret(url: string) {
   const secret = process.env.ADMIN_SECRET;
@@ -12,9 +12,6 @@ function checkSecret(url: string) {
 }
 
 export async function POST(request: Request) {
-  if (!checkSecret(request.url)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
   try {
     const { name, email, message } = await request.json();
     if (!name || !email || !message) {
@@ -28,11 +25,15 @@ export async function POST(request: Request) {
       timestamp: new Date().toISOString(),
     };
 
-    // read existing
-    const file = await fs.readFile(DATA_PATH, "utf-8");
-    const messages: any[] = JSON.parse(file);
+    const store = getStore({ name: STORE_NAME, consistency: "strong" });
+
+    // Read existing messages
+    const existing = await store.get(MESSAGES_KEY, { type: "json" });
+    const messages: any[] = Array.isArray(existing) ? existing : [];
     messages.push(entry);
-    await fs.writeFile(DATA_PATH, JSON.stringify(messages, null, 2));
+
+    // Write updated messages
+    await store.setJSON(MESSAGES_KEY, messages);
 
     return NextResponse.json({ success: true });
   } catch (e) {
@@ -46,9 +47,9 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
-    const file = await fs.readFile(DATA_PATH, "utf-8");
-    const messages = JSON.parse(file);
-    return NextResponse.json(messages);
+    const store = getStore({ name: STORE_NAME, consistency: "strong" });
+    const messages = await store.get(MESSAGES_KEY, { type: "json" });
+    return NextResponse.json(Array.isArray(messages) ? messages : []);
   } catch (e) {
     console.error("Error reading messages", e);
     return NextResponse.json([], { status: 200 });
@@ -61,10 +62,14 @@ export async function DELETE(request: Request) {
   }
   try {
     const { timestamp } = await request.json();
-    const file = await fs.readFile(DATA_PATH, "utf-8");
-    let messages: any[] = JSON.parse(file);
-    messages = messages.filter(m => m.timestamp !== timestamp);
-    await fs.writeFile(DATA_PATH, JSON.stringify(messages, null, 2));
+    const store = getStore({ name: STORE_NAME, consistency: "strong" });
+
+    const existing = await store.get(MESSAGES_KEY, { type: "json" });
+    let messages: any[] = Array.isArray(existing) ? existing : [];
+    messages = messages.filter((m) => m.timestamp !== timestamp);
+
+    await store.setJSON(MESSAGES_KEY, messages);
+
     return NextResponse.json({ success: true });
   } catch (e) {
     console.error("Error deleting message", e);
