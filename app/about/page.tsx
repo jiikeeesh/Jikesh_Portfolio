@@ -13,7 +13,7 @@ export default function About() {
           I'm a passionate web developer with expertise in modern technologies like React, Next.js, and TypeScript. I love building responsive and user-friendly applications that solve real-world problems.
         </p>
         <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-          With several years of experience in full-stack development, I focus on creating clean, maintainable code and delivering exceptional user experiences. I'm always eager to learn new technologies and best practices in web development.
+          I build maintainable full-stack applications and produce professional visual media. From writing scalable code to editing polished video, I focus on delivering a complete digital experience.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
@@ -42,7 +42,7 @@ export default function About() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-blue-600 dark:text-blue-400">✓</span>
-                Database Design
+                Photography & Videography
               </li>
             </ul>
           </div>

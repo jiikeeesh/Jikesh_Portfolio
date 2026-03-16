@@ -27,10 +27,10 @@ export default function Home() {
           <div className="text-center lg:text-left">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Hi, I'm Jikesh</h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8">
-              Hello! I'm Jikesh Lo Tamang, a passionate Computer Science student. I enjoy creating beautiful websites, mastering programming languages, and exploring cutting-edge technologies.
+              I'm a passionate Computer Science student. I enjoy creating beautiful websites, mastering programming languages, and exploring cutting-edge technologies.
             </p>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-              My job is to build your website so that it is functional and user-friendly but at the same time attractive. Moreover, I add personal touch to your product and make sure that is eye-catching and easy to use. My mission is to develop innovative projects and continuously grow as a tech enthusiast.
+              I build maintainable full-stack applications and produce professional visual media. From writing scalable code to editing polished video, I focus on delivering a complete digital experience.
             </p>
             <a href="/contact" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition">
               Get in Touch
