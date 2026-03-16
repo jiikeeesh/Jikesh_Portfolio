@@ -1,24 +1,33 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { getStore } from "@netlify/blobs";
 
-const DATA_PATH = path.join(process.cwd(), "data", "messages.json");
-
-function checkSecret(url: string) {
-  const secret = process.env.ADMIN_SECRET;
-  if (!secret) return true;
-  const provided = new URL(url).searchParams.get("secret");
-  return provided === secret;
+// Helper to get the messages store and all messages
+async function getMessages() {
+  try {
+    const store = getStore("messages");
+    const { blobs } = await store.list();
+    const messages = await Promise.all(
+      blobs.map(async (blob) => {
+        const data = await store.get(blob.key, { type: "json" });
+        return data;
+      })
+    );
+    // Sort by timestamp descending (newest first)
+    return messages
+      .filter(Boolean)
+      .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  } catch (e) {
+    console.error("Error reading messages from Blobs:", e);
+    return [];
+  }
 }
 
+// POST: Public endpoint — no authentication required so visitors can submit the form
 export async function POST(request: Request) {
-  if (!checkSecret(request.url)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
   try {
     const { name, email, message } = await request.json();
     if (!name || !email || !message) {
-      return NextResponse.json({ error: "Missing field" }, { status: 400 });
+      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
     const entry = {
@@ -28,46 +37,48 @@ export async function POST(request: Request) {
       timestamp: new Date().toISOString(),
     };
 
-    // read existing
-    const file = await fs.readFile(DATA_PATH, "utf-8");
-    const messages: any[] = JSON.parse(file);
-    messages.push(entry);
-    await fs.writeFile(DATA_PATH, JSON.stringify(messages, null, 2));
+    const store = getStore("messages");
+    // Use the timestamp as a unique key
+    await store.setJSON(entry.timestamp, entry);
 
     return NextResponse.json({ success: true });
   } catch (e) {
-    console.error("Error writing message", e);
+    console.error("Error saving message:", e);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }
 
+// GET: Admin-only endpoint protected by the admin session cookie
 export async function GET(request: Request) {
-  if (!checkSecret(request.url)) {
+  // Protect this endpoint — only accessible to logged-in admins
+  const cookie = request.headers.get("cookie") || "";
+  if (!cookie.includes("admin_token=authenticated")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  try {
-    const file = await fs.readFile(DATA_PATH, "utf-8");
-    const messages = JSON.parse(file);
-    return NextResponse.json(messages);
-  } catch (e) {
-    console.error("Error reading messages", e);
-    return NextResponse.json([], { status: 200 });
-  }
+
+  const messages = await getMessages();
+  return NextResponse.json(messages);
 }
 
+// DELETE: Admin-only endpoint to delete a specific message by timestamp
 export async function DELETE(request: Request) {
-  if (!checkSecret(request.url)) {
+  const cookie = request.headers.get("cookie") || "";
+  if (!cookie.includes("admin_token=authenticated")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
   try {
     const { timestamp } = await request.json();
-    const file = await fs.readFile(DATA_PATH, "utf-8");
-    let messages: any[] = JSON.parse(file);
-    messages = messages.filter(m => m.timestamp !== timestamp);
-    await fs.writeFile(DATA_PATH, JSON.stringify(messages, null, 2));
+    if (!timestamp) {
+      return NextResponse.json({ error: "Timestamp required" }, { status: 400 });
+    }
+
+    const store = getStore("messages");
+    await store.delete(timestamp);
+
     return NextResponse.json({ success: true });
   } catch (e) {
-    console.error("Error deleting message", e);
+    console.error("Error deleting message:", e);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }
