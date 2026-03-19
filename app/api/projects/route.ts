@@ -88,3 +88,33 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 });
   }
 }
+
+export async function PUT(request: Request) {
+  try {
+    const updatedProject = await request.json();
+    const { id } = updatedProject;
+
+    if (!id) {
+      return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
+    }
+
+    const projects = await getProjects();
+    const index = projects.findIndex((p: any) => p.id === id);
+
+    if (index === -1) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
+
+    projects[index] = { ...projects[index], ...updatedProject };
+    
+    const success = await saveProjects(projects);
+    if (success) {
+      return NextResponse.json(projects[index]);
+    } else {
+      throw new Error("Failed to save to database file.");
+    }
+  } catch (error) {
+    console.error("Error updating project:", error);
+    return NextResponse.json({ error: 'Failed to update project' }, { status: 500 });
+  }
+}

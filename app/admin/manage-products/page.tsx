@@ -122,7 +122,13 @@ export default function ManageProductsPage() {
                       <td className="p-4 font-medium text-green-600 dark:text-green-400">
                         ${product.price}
                       </td>
-                      <td className="p-4 text-right">
+                      <td className="p-4 text-right flex justify-end gap-2">
+                        <a
+                          href={`/admin/edit-product/${product.id}`}
+                          className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 rounded-lg transition"
+                        >
+                          Edit
+                        </a>
                         <button
                           onClick={() => handleDelete(product.id)}
                           disabled={deletingId === product.id}

@@ -69,3 +69,34 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 });
   }
 }
+
+export async function PUT(request: Request) {
+  try {
+    const updatedProduct = await request.json();
+    const { id } = updatedProduct;
+
+    if (!id) {
+      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
+    }
+
+    // Read existing products
+    const fileContents = await fs.readFile(dataFilePath, 'utf8');
+    const products = JSON.parse(fileContents);
+
+    // Find and update the product
+    const index = products.findIndex((p: any) => p.id === id);
+    if (index === -1) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    }
+
+    products[index] = { ...products[index], ...updatedProduct };
+
+    // Save back to file
+    await fs.writeFile(dataFilePath, JSON.stringify(products, null, 2), 'utf8');
+
+    return NextResponse.json(products[index]);
+  } catch (error) {
+    console.error('Error updating product:', error);
+    return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });
+  }
+}

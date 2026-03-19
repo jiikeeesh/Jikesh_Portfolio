@@ -133,7 +133,13 @@ export default function ManageProjectsPage() {
                           </a>
                         </div>
                       </td>
-                      <td className="p-4 text-right">
+                      <td className="p-4 text-right flex justify-end gap-2">
+                        <Link
+                          href={`/admin/edit-project/${project.id}`}
+                          className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 rounded-lg transition"
+                        >
+                          Edit
+                        </Link>
                         <button
                           onClick={() => handleDelete(project.id)}
                           disabled={deleteLoading === project.id}
