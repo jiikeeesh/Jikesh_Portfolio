@@ -7,8 +7,7 @@ interface Product {
   id: number;
   name: string;
   description: string;
-  price: number;
-  icon: string;
+  image: string;
   colors: string;
   buttonText: string;
 }
@@ -97,7 +96,6 @@ export default function ManageProductsPage() {
                   <tr className="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800">
                     <th className="p-4 font-semibold text-gray-600 dark:text-gray-300">ID</th>
                     <th className="p-4 font-semibold text-gray-600 dark:text-gray-300">Product</th>
-                    <th className="p-4 font-semibold text-gray-600 dark:text-gray-300">Price</th>
                     <th className="p-4 font-semibold text-gray-600 dark:text-gray-300 text-right">Actions</th>
                   </tr>
                 </thead>
@@ -110,17 +108,25 @@ export default function ManageProductsPage() {
                       <td className="p-4 text-gray-500">#{product.id}</td>
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded shadow flex items-center justify-center bg-gradient-to-br ${product.colors}`}>
-                            <span className="text-xl">{product.icon}</span>
+                          <div className={`w-10 h-10 rounded shadow overflow-hidden bg-gradient-to-br ${product.colors}`}>
+                            {product.image ? (
+                              <img 
+                                src={product.image} 
+                                alt="" 
+                                className="w-full h-full object-cover" 
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/100x100?text=?';
+                                }}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">?</div>
+                            )}
                           </div>
                           <div>
                             <div className="font-medium text-gray-900 dark:text-white">{product.name}</div>
                             <div className="text-sm text-gray-500 truncate max-w-xs">{product.description}</div>
                           </div>
                         </div>
-                      </td>
-                      <td className="p-4 font-medium text-green-600 dark:text-green-400">
-                        ${product.price}
                       </td>
                       <td className="p-4 text-right flex justify-end gap-2">
                         <a

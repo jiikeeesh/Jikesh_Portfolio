@@ -10,8 +10,7 @@ interface Product {
   id: number;
   name: string;
   description: string;
-  price: number;
-  icon: string;
+  image: string;
   colors: string;
   buttonText: string;
 }
@@ -98,7 +97,18 @@ export default function ProductPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Product Hero Icon Container */}
           <div className={`aspect-square w-full rounded-2xl bg-gradient-to-br ${product.colors} flex flex-col items-center justify-center shadow-2xl overflow-hidden`}>
-            <span className="text-9xl mb-4 drop-shadow-xl">{product.icon}</span>
+            {product.image ? (
+              <img 
+                src={product.image} 
+                alt={product.name} 
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/600x600?text=Product+Image+Not+Found';
+                }}
+              />
+            ) : (
+              <span className="text-9xl mb-4 drop-shadow-xl text-white/20">?</span>
+            )}
           </div>
 
           {/* Product Details Block */}

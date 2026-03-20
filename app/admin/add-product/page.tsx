@@ -12,8 +12,7 @@ export default function AddProductPage() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    price: "",
-    icon: "✨",
+    image: "",
     colors: "from-blue-400 to-purple-600",
     buttonText: "Add to Cart",
   });
@@ -31,7 +30,6 @@ export default function AddProductPage() {
     try {
       const payload = {
         ...formData,
-        price: Number(formData.price),
       };
 
       const res = await fetch("/api/products", {
@@ -50,8 +48,7 @@ export default function AddProductPage() {
       setFormData({
         name: "",
         description: "",
-        price: "",
-        icon: "✨",
+        image: "",
         colors: "from-blue-400 to-purple-600",
         buttonText: "Add to Cart",
       });
@@ -112,23 +109,6 @@ export default function AddProductPage() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Price ($)
-                </label>
-                <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  required
-                  min="0"
-                  step="0.01"
-                  value={formData.price}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="e.g. 49.99"
-                />
-              </div>
             </div>
 
             <div className="space-y-2">
@@ -149,18 +129,18 @@ export default function AddProductPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <label htmlFor="icon" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Emoji Icon
+                <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Image URL (PNG/JPG)
                 </label>
                 <input
                   type="text"
-                  id="icon"
-                  name="icon"
+                  id="image"
+                  name="image"
                   required
-                  value={formData.icon}
+                  value={formData.image}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="e.g. 🎨"
+                  placeholder="e.g. https://example.com/photo.png"
                 />
               </div>
 

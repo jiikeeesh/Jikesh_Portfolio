@@ -26,7 +26,10 @@ export async function POST(request: Request) {
 
     // Assign a new ID based on the highest existing ID
     const newId = products.length > 0 ? Math.max(...products.map((p: any) => p.id)) + 1 : 1;
-    const productToSave = { ...newProduct, id: newId };
+    
+    // Remove image from payload if it exists (extra safety) or rename icon to image if accidentally sent
+    const { image, icon, ...restOfProduct } = newProduct;
+    const productToSave = { ...restOfProduct, image: image || "", id: newId };
 
     // Append to array and save
     products.push(productToSave);
@@ -89,7 +92,8 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    products[index] = { ...products[index], ...updatedProduct };
+    const { image, icon, ...restOfUpdate } = updatedProduct;
+    products[index] = { ...products[index], ...restOfUpdate, ...(image ? { image } : {}) };
 
     // Save back to file
     await fs.writeFile(dataFilePath, JSON.stringify(products, null, 2), 'utf8');

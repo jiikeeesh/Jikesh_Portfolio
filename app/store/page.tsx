@@ -11,8 +11,7 @@ interface Product {
   id: number;
   name: string;
   description: string;
-  price: number;
-  icon: string;
+  image: string;
   colors: string;
   buttonText: string;
 }
@@ -63,9 +62,18 @@ export default function StorePage() {
                 <div
                   className={`h-48 bg-gradient-to-br ${product.colors} flex items-center justify-center`}
                 >
-                  <span className="text-white text-4xl font-bold">
-                    {product.icon}
-                  </span>
+                  {product.image ? (
+                    <img 
+                      src={product.image} 
+                      alt={product.name} 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=No+Image';
+                      }}
+                    />
+                  ) : (
+                    <span className="text-white text-4xl font-bold">?</span>
+                  )}
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-2">{product.name}</h3>

@@ -2,8 +2,7 @@
   {
     "name": "Hotwheels",
     "description": "I sell some rare hotwheels collection. For more info contact me.",
-    "price": 10,
-    "icon": "🏎️",
+    "image": "https://png.pngtree.com/png-vector/20250217/ourmid/pngtree-the-action-of-a-zooming-blue-hot-wheels-car-super-png-image_15469688.png",
     "colors": "from-indigo-400 to-purple-600",
     "buttonText": "Get Details",
     "id": 6

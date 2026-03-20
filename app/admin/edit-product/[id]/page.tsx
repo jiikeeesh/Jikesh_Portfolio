@@ -8,8 +8,7 @@ interface Product {
   id: number;
   name: string;
   description: string;
-  price: number;
-  icon: string;
+  image: string;
   colors: string;
   buttonText: string;
 }
@@ -26,8 +25,7 @@ export default function EditProductPage({ params: paramsPromise }: { params: Pro
     id: 0,
     name: "",
     description: "",
-    price: 0,
-    icon: "📦",
+    image: "",
     colors: "from-blue-400 to-purple-600",
     buttonText: "View Details",
   });
@@ -129,14 +127,14 @@ export default function EditProductPage({ params: paramsPromise }: { params: Pro
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Icon (Emoji)</label>
+                <label className="block text-sm font-medium mb-2">Image URL (PNG/JPG)</label>
                 <input
                   type="text"
                   required
-                  value={formData.icon}
-                  onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-transparent focus:ring-2 focus:ring-blue-500 outline-none text-center text-2xl"
-                  placeholder="🏎️"
+                  value={formData.image}
+                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-transparent focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="https://example.com/photo.png"
                 />
               </div>
             </div>
@@ -155,18 +153,6 @@ export default function EditProductPage({ params: paramsPromise }: { params: Pro
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium mb-2">Price ($)</label>
-                <input
-                  type="number"
-                  required
-                  value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-transparent focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="0.00"
-                />
-                <p className="text-xs text-gray-500 mt-1">Note: Prices are hidden from customers but stored here.</p>
-              </div>
-              <div>
                 <label className="block text-sm font-medium mb-2">Color Gradient (Tailwind classes)</label>
                 <input
                   type="text"
@@ -180,8 +166,19 @@ export default function EditProductPage({ params: paramsPromise }: { params: Pro
             </div>
 
             <div className="p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-lg flex items-center gap-4">
-              <div className={`w-16 h-16 rounded-xl flex items-center justify-center bg-gradient-to-br ${formData.colors} shadow-lg text-3xl`}>
-                {formData.icon}
+              <div className={`w-16 h-16 rounded-xl overflow-hidden bg-gradient-to-br ${formData.colors} shadow-lg`}>
+                {formData.image ? (
+                  <img 
+                    src={formData.image} 
+                    alt="Preview" 
+                    className="w-full h-full object-cover" 
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150x150?text=Preview+Error';
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">?</div>
+                )}
               </div>
               <div>
                 <p className="text-sm font-bold">Preview</p>
