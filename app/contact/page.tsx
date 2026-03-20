@@ -121,8 +121,8 @@ export default function Contact() {
               <div className="space-y-6">
                 <div>
                   <h4 className="text-lg font-semibold mb-2">Email</h4>
-                  <a href="mailto:me@jikeshlotamang.com.np" className="text-blue-600 dark:text-blue-400 hover:underline text-lg">
-                    me@jikeshlotamang.com.np
+                  <a href="mailto:jiikeeeshphotography@gmail.com" className="text-blue-600 dark:text-blue-400 hover:underline text-lg">
+                    jiikeeeshphotography@gmail.com
                   </a>
                 </div>
                 <div>
@@ -144,8 +144,8 @@ export default function Contact() {
               <div className="space-y-4">
                 <div className="block p-4 border border-gray-200 dark:border-gray-800 rounded-lg">
                   <h4 className="font-semibold mb-2">Email</h4>
-                  <p className="text-gray-600 dark:text-gray-400">me@jikeshlotamang.com.np</p>
-                </div>
+                    <p className="text-gray-600 dark:text-gray-400">jiikeeeshphotography@gmail.com</p>
+                  </div>
                 <div className="block p-4 border border-gray-200 dark:border-gray-800 rounded-lg">
                   <h4 className="font-semibold mb-2">GitHub</h4>
                   <p className="text-gray-600 dark:text-gray-400">github.com/jiikeeesh</p>
