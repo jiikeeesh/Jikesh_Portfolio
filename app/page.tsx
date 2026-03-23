@@ -41,8 +41,8 @@ export default function Home() {
             <a href="/contact" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1">
               Get in Touch
             </a>
-            <a href="/store" className="inline-block bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-black dark:text-white font-bold py-4 px-10 rounded-xl transition-all">
-              Visit Store
+            <a href="/projects" className="inline-block bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-black dark:text-white font-bold py-4 px-10 rounded-xl transition-all">
+              Show Projects
             </a>
           </div>
         </div>
