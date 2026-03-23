@@ -3,7 +3,7 @@ export default function Footer() {
     <footer className="border-t border-gray-200 dark:border-gray-800 py-12 px-6 text-center text-gray-600 dark:text-gray-400 mt-auto">
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-wrap justify-center gap-6 md:gap-8 mb-6">
-          <a href="mailto:me@jikeshlotamang.com.np" className="hover:text-blue-600 dark:hover:text-blue-400 transition flex flex-col items-center font-semibold">
+          <a href="mailto:jiikeeeshphotography@gmail.com" className="hover:text-blue-600 dark:hover:text-blue-400 transition flex flex-col items-center font-semibold">
             <svg className="w-10 h-10 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
