@@ -1,5 +1,4 @@
-import { promises as fs } from "fs";
-import path from "path";
+import { getMessages } from "../../../lib/messages";
 import MessagesViewer from "../../../components/MessagesViewer";
 
 export const metadata = {
@@ -18,14 +17,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
     );
   }
 
-  const dataPath = path.join(process.cwd(), "data", "messages.json");
-  let messages: any[] = [];
-  try {
-    const file = await fs.readFile(dataPath, "utf-8");
-    messages = JSON.parse(file);
-  } catch (e) {
-    console.error(e);
-  }
+  const messages = await getMessages();
 
   return (
     <div className="min-h-screen bg-transparent text-black dark:text-white">
