@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { usePostgres, getSQL, ensureTables } from '../../../lib/db';
 
 const dataFilePath = path.join(process.cwd(), 'data/projects.json');
 
-// Helper to reliably read the JSON file
-async function getProjects() {
+// Helper to reliably read the JSON file (Local fallback)
+async function getProjectsLocal() {
   try {
     const fileContents = await fs.readFile(dataFilePath, 'utf8');
     return JSON.parse(fileContents);
@@ -15,8 +16,8 @@ async function getProjects() {
   }
 }
 
-// Helper to save back to JSON file
-async function saveProjects(projects: any) {
+// Helper to save back to JSON file (Local fallback)
+async function saveProjectsLocal(projects: any) {
   try {
     await fs.writeFile(dataFilePath, JSON.stringify(projects, null, 2));
     return true;
@@ -27,33 +28,57 @@ async function saveProjects(projects: any) {
 }
 
 export async function GET() {
-  const projects = await getProjects();
-  return NextResponse.json(projects);
+  if (usePostgres()) {
+    try {
+      await ensureTables();
+      const sql = getSQL();
+      const rows = await sql`SELECT * FROM projects ORDER BY id ASC`;
+      return NextResponse.json(rows);
+    } catch (e) {
+      console.error("Postgres get projects error:", e);
+      return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 });
+    }
+  } else {
+    const projects = await getProjectsLocal();
+    return NextResponse.json(projects);
+  }
 }
 
 export async function POST(request: Request) {
   try {
     const newProject = await request.json();
-    const projects = await getProjects();
-    
-    // Generate a new ID based on the highest existing ID
-    const maxId = projects.length > 0 ? Math.max(...projects.map((p: any) => p.id)) : 0;
-    const projectWithId = {
-      ...newProject,
-      id: maxId + 1
-    };
 
-    projects.push(projectWithId);
-    
-    const success = await saveProjects(projects);
-    if (success) {
-      return NextResponse.json(projectWithId, { status: 201 });
+    if (usePostgres()) {
+      await ensureTables();
+      const sql = getSQL();
+      
+      const rows = await sql`
+        INSERT INTO projects (title, description, tech, link, github)
+        VALUES (
+          ${newProject.title},
+          ${newProject.description},
+          ${newProject.tech || []},
+          ${newProject.link || '#'},
+          ${newProject.github || '#'}
+        )
+        RETURNING *
+      `;
+      return NextResponse.json(rows[0], { status: 201 });
     } else {
-      throw new Error("Failed to save to database file.");
+      const projects = await getProjectsLocal();
+      const maxId = projects.length > 0 ? Math.max(...projects.map((p: any) => p.id)) : 0;
+      const projectWithId = { ...newProject, id: maxId + 1 };
+      projects.push(projectWithId);
+      const success = await saveProjectsLocal(projects);
+      if (success) {
+        return NextResponse.json(projectWithId, { status: 201 });
+      } else {
+        throw new Error("Failed to save to database file.");
+      }
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error adding project:", error);
-    return NextResponse.json({ error: 'Failed to add project' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to add project', details: error.message }, { status: 500 });
   }
 }
 
@@ -67,25 +92,34 @@ export async function DELETE(request: Request) {
     }
 
     const id = parseInt(idParam, 10);
-    const projects = await getProjects();
-    
-    const initialLength = projects.length;
-    const filteredProjects = projects.filter((p: any) => p.id !== id);
 
-    if (filteredProjects.length === initialLength) {
-      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
-    }
-
-    const success = await saveProjects(filteredProjects);
-    if (success) {
+    if (usePostgres()) {
+      await ensureTables();
+      const sql = getSQL();
+      const result = await sql`DELETE FROM projects WHERE id = ${id} RETURNING id`;
+      if (result.length === 0) {
+         return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+      }
       return NextResponse.json({ success: true }, { status: 200 });
     } else {
-      throw new Error("Failed to save to database file.");
-    }
+      const projects = await getProjectsLocal();
+      const initialLength = projects.length;
+      const filteredProjects = projects.filter((p: any) => p.id !== id);
 
-  } catch (error) {
+      if (filteredProjects.length === initialLength) {
+        return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+      }
+
+      const success = await saveProjectsLocal(filteredProjects);
+      if (success) {
+        return NextResponse.json({ success: true }, { status: 200 });
+      } else {
+        throw new Error("Failed to save to database file.");
+      }
+    }
+  } catch (error: any) {
     console.error("Error deleting project:", error);
-    return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to delete project', details: error.message }, { status: 500 });
   }
 }
 
@@ -98,23 +132,42 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
     }
 
-    const projects = await getProjects();
-    const index = projects.findIndex((p: any) => p.id === id);
-
-    if (index === -1) {
-      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
-    }
-
-    projects[index] = { ...projects[index], ...updatedProject };
-    
-    const success = await saveProjects(projects);
-    if (success) {
-      return NextResponse.json(projects[index]);
+    if (usePostgres()) {
+      await ensureTables();
+      const sql = getSQL();
+      const rows = await sql`
+        UPDATE projects
+        SET title = ${updatedProject.title},
+            description = ${updatedProject.description},
+            tech = ${updatedProject.tech || []},
+            link = ${updatedProject.link || '#'},
+            github = ${updatedProject.github || '#'}
+        WHERE id = ${id}
+        RETURNING *
+      `;
+      if (rows.length === 0) {
+        return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+      }
+      return NextResponse.json(rows[0]);
     } else {
-      throw new Error("Failed to save to database file.");
+      const projects = await getProjectsLocal();
+      const index = projects.findIndex((p: any) => p.id === id);
+
+      if (index === -1) {
+        return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+      }
+
+      projects[index] = { ...projects[index], ...updatedProject };
+      const success = await saveProjectsLocal(projects);
+      if (success) {
+        return NextResponse.json(projects[index]);
+      } else {
+        throw new Error("Failed to save to database file.");
+      }
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating project:", error);
-    return NextResponse.json({ error: 'Failed to update project' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to update project', details: error.message }, { status: 500 });
   }
 }
+
