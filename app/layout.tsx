@@ -16,9 +16,9 @@ export const metadata: Metadata = {
   title: "Jikesh - Portfolio",
   description: "Personal portfolio of Jikesh, a web developer specializing in React, Next.js, and modern web technologies.",
   icons: {
-    icon: "/jikesh.png",
-    shortcut: "/jikesh.png",
-    apple: "/apple-touch-icon.png",
+    icon: "/jikesh.ico",
+    shortcut: "/jikesh.ico",
+    apple: "/jikesh.ico",
   },
 };
 
