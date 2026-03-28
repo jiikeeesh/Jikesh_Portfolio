@@ -1,4 +1,4 @@
-import { put, list, del, head } from "@vercel/blob";
+import { neon } from "@neondatabase/serverless";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -12,67 +12,73 @@ export interface Message {
 const DATA_PATH = path.join(process.cwd(), "data", "messages.json");
 
 /**
- * Check if we're running on Vercel (production/preview).
- * VERCEL env var is automatically set to "1" on Vercel deployments.
+ * Get the database connection URL, checking both common env var names.
  */
-function isVercel(): boolean {
-  return process.env.VERCEL === "1";
+function getDatabaseUrl(): string | undefined {
+  return process.env.DATABASE_URL || process.env.POSTGRES_URL;
 }
 
 /**
- * Build a unique blob pathname for a message based on its timestamp.
+ * Check if we should use Postgres.
+ * If DATABASE_URL or POSTGRES_URL is set, we use Neon Postgres.
  */
-function messageBlobPath(timestamp: string): string {
-  const sanitized = timestamp.replace(/:/g, "-").replace(/\./g, "_");
-  return `messages/${sanitized}.json`;
+function usePostgres(): boolean {
+  return !!getDatabaseUrl();
 }
 
-// ─── Vercel Blob helpers ────────────────────────────────────────────────────
+function getSQL() {
+  return neon(getDatabaseUrl()!);
+}
 
-async function getMessagesVercel(): Promise<Message[]> {
+/**
+ * Ensure the messages table exists in the database.
+ */
+async function ensureTable() {
+  const sql = getSQL();
+  await sql`
+    CREATE TABLE IF NOT EXISTS messages (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      message TEXT NOT NULL,
+      timestamp TEXT NOT NULL
+    )
+  `;
+}
+
+// ─── Neon Postgres helpers ──────────────────────────────────────────────────
+
+async function getMessagesPostgres(): Promise<Message[]> {
   try {
-    const { blobs } = await list({ prefix: "messages/" });
-    const messages = await Promise.all(
-      blobs.map(async (blob) => {
-        try {
-          const res = await fetch(blob.url);
-          return (await res.json()) as Message;
-        } catch (e) {
-          console.error(`Error fetching blob ${blob.pathname}:`, e);
-          return null;
-        }
-      })
-    );
-    return messages
-      .filter((m): m is Message => m !== null)
-      .sort(
-        (a, b) =>
-          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-      );
+    await ensureTable();
+    const sql = getSQL();
+    const rows = await sql`
+      SELECT name, email, message, timestamp
+      FROM messages
+      ORDER BY timestamp DESC
+    `;
+    return rows as Message[];
   } catch (e) {
-    console.error("Vercel Blob list error:", e);
+    console.error("Postgres getMessages error:", e);
     return [];
   }
 }
 
-async function saveMessageVercel(entry: Message): Promise<void> {
-  const blobPath = messageBlobPath(entry.timestamp);
-  await put(blobPath, JSON.stringify(entry), {
-    contentType: "application/json",
-    access: "public",
-    addRandomSuffix: false,
-  });
+async function saveMessagePostgres(entry: Message): Promise<void> {
+  await ensureTable();
+  const sql = getSQL();
+  await sql`
+    INSERT INTO messages (name, email, message, timestamp)
+    VALUES (${entry.name}, ${entry.email}, ${entry.message}, ${entry.timestamp})
+  `;
 }
 
-async function deleteMessageVercel(timestamp: string): Promise<void> {
-  // We need to find the blob URL to delete it
-  const { blobs } = await list({ prefix: "messages/" });
-  const target = blobs.find((b) =>
-    b.pathname === messageBlobPath(timestamp)
-  );
-  if (target) {
-    await del(target.url);
-  }
+async function deleteMessagePostgres(timestamp: string): Promise<void> {
+  await ensureTable();
+  const sql = getSQL();
+  await sql`
+    DELETE FROM messages WHERE timestamp = ${timestamp}
+  `;
 }
 
 // ─── Local filesystem helpers ───────────────────────────────────────────────
@@ -120,13 +126,13 @@ async function deleteMessageLocal(timestamp: string): Promise<void> {
 // ─── Public API ─────────────────────────────────────────────────────────────
 
 export async function getMessages(): Promise<Message[]> {
-  return isVercel() ? getMessagesVercel() : getMessagesLocal();
+  return usePostgres() ? getMessagesPostgres() : getMessagesLocal();
 }
 
 export async function saveMessage(entry: Message): Promise<void> {
-  return isVercel() ? saveMessageVercel(entry) : saveMessageLocal(entry);
+  return usePostgres() ? saveMessagePostgres(entry) : saveMessageLocal(entry);
 }
 
 export async function deleteMessage(timestamp: string): Promise<void> {
-  return isVercel() ? deleteMessageVercel(timestamp) : deleteMessageLocal(timestamp);
+  return usePostgres() ? deleteMessagePostgres(timestamp) : deleteMessageLocal(timestamp);
 }
