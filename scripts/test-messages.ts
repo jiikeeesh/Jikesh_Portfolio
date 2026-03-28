@@ -1,8 +1,8 @@
-import { saveMessage, getMessages, deleteMessage, isNetlify } from "../lib/messages";
+import { saveMessage, getMessages, deleteMessage } from "../lib/messages";
 
 async function test() {
   console.log("Starting message service test...");
-  console.log("Is Netlify:", isNetlify());
+  console.log("Running on Vercel:", process.env.VERCEL === "1");
 
   const testMessage = {
     name: "Test User",
