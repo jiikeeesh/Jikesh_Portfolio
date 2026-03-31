@@ -52,16 +52,8 @@ body {
 }
 
 /* ─── Smooth Theme Transition ─────────────────────────────────────── */
-*,
-*::before,
-*::after {
-  transition:
-    background-color 300ms ease,
-    border-color     300ms ease,
-    color            200ms ease,
-    fill             200ms ease,
-    stroke           200ms ease,
-    box-shadow       200ms ease;
+body {
+  transition: background-color 300ms ease, color 200ms ease;
 }
 
 /* Exempt elements where transitions would be distracting */
