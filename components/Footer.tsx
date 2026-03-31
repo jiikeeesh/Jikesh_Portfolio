@@ -1,7 +1,10 @@
+import ThemeToggle from "./ThemeToggle";
+
 export default function Footer() {
   return (
     <footer className="border-t border-gray-200 dark:border-gray-800 py-12 px-6 text-center text-gray-600 dark:text-gray-400 mt-auto">
       <div className="max-w-4xl mx-auto">
+        {/* Social Links */}
         <div className="flex flex-wrap justify-center gap-6 md:gap-8 mb-6">
           <a href="mailto:jiikeeeshphotography@gmail.com" className="hover:text-blue-600 dark:hover:text-blue-400 transition flex flex-col items-center font-semibold">
             <svg className="w-10 h-10 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -24,9 +27,19 @@ export default function Footer() {
             </svg>
             GitHub
           </a>
-
         </div>
-        <p>&copy; 2024 Jikesh. All rights reserved.</p>
+
+        {/* Divider */}
+        <div className="border-t border-gray-100 dark:border-gray-800/60 mb-5" />
+
+        {/* Bottom row: copyright + theme toggle */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm">© 2024 Jikesh. All rights reserved.</p>
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <span className="text-xs uppercase tracking-wider font-medium">Theme</span>
+            <ThemeToggle />
+          </div>
+        </div>
       </div>
     </footer>
   );
