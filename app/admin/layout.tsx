@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function AdminLayout({
   children,
@@ -90,8 +91,10 @@ export default function AdminLayout({
             </div>
           </div>
 
-          {/* Right side: logout + hamburger */}
-          <div className="flex items-center gap-3">
+          {/* Right side: theme + logout + hamburger */}
+          <div className="flex items-center gap-3 md:gap-5">
+            <ThemeToggle />
+            
             <button
               onClick={handleLogout}
               disabled={loggingOut}
