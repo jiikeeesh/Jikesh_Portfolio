@@ -25,9 +25,7 @@ export default function Navigation() {
           <Link href="/projects" className="hover:text-blue-600 dark:hover:text-blue-400">
             Projects
           </Link>
-          <Link href="/store" className="hover:text-blue-600 dark:hover:text-blue-400">
-            Store
-          </Link>
+
           <Link href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400">
             Contact
           </Link>
@@ -66,13 +64,7 @@ export default function Navigation() {
           >
             Projects
           </Link>
-          <Link 
-            href="/store" 
-            className="block text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400"
-            onClick={() => setIsOpen(false)}
-          >
-            Store
-          </Link>
+
           <Link 
             href="/contact" 
             className="block text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400"
