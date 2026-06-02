@@ -26,7 +26,7 @@ export default function AdminLogin() {
 
       if (res.ok) {
         // Redirect to manage products on successful login
-        router.push("/admin/manage-products");
+        router.push("/admin/manage-projects");
         router.refresh();
       } else {
         const data = await res.json();

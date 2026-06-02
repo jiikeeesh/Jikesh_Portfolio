@@ -46,22 +46,6 @@ export default function AdminLayout({
             {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-4">
               <Link
-                href="/admin/manage-products"
-                className={`text-sm font-medium hover:text-blue-600 transition ${
-                  pathname === "/admin/manage-products" ? "text-blue-600" : "text-gray-600 dark:text-gray-400"
-                }`}
-              >
-                Products
-              </Link>
-              <Link
-                href="/admin/add-product"
-                className={`text-sm font-medium hover:text-blue-600 transition ${
-                  pathname === "/admin/add-product" ? "text-blue-600" : "text-gray-600 dark:text-gray-400"
-                }`}
-              >
-                Add Product
-              </Link>
-              <Link
                 href="/admin/messages"
                 className={`text-sm font-medium hover:text-blue-600 transition ${
                   pathname === "/admin/messages" ? "text-blue-600" : "text-gray-600 dark:text-gray-400"
@@ -119,8 +103,6 @@ function MobileMenu({ pathname }: { pathname: string }) {
   const [open, setOpen] = useState(false);
 
   const navLinks = [
-    { href: "/admin/manage-products", label: "📦 Products" },
-    { href: "/admin/add-product", label: "➕ Add Product" },
     { href: "/admin/messages", label: "💬 Messages" },
     { href: "/admin/manage-projects", label: "🗂 Projects" },
     { href: "/admin/add-project", label: "➕ Add Project" },
@@ -183,7 +165,7 @@ function MobileMenu({ pathname }: { pathname: string }) {
           }}
           className="dark:[--dropdown-bg:#111827] dark:border-gray-700"
         >
-          {navLinks.map((link, i) => (
+          {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -192,7 +174,7 @@ function MobileMenu({ pathname }: { pathname: string }) {
                 pathname === link.href
                   ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20"
                   : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-              } ${i === 3 ? "border-t border-gray-200 dark:border-gray-700" : ""}`}
+              }`}
             >
               {link.label}
             </Link>
