@@ -9,12 +9,17 @@ export default function About() {
       {/* About Section */}
       <section className="max-w-4xl mx-auto px-6 py-16">
         <h2 className="text-4xl font-bold mb-8">About Me</h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
-          I'm a passionate web developer with expertise in modern technologies like React, Next.js, and TypeScript. I love building responsive and user-friendly applications that solve real-world problems.
-        </p>
-        <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-          I build maintainable full-stack applications and produce professional visual media. From writing scalable code to editing polished video, I focus on delivering a complete digital experience.
-        </p>
+        <div className="space-y-6 mb-12">
+          <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            I am a Computer Science student with a deep passion for engineering robust, scalable software. For me, development goes beyond simply making things work—it is about writing clean, maintainable code that can grow and adapt over time. Whether I am designing complex backend architectures or building interactive full-stack web applications, I take pride in applying foundational computer science principles to solve real-world problems efficiently and elegantly.
+          </p>
+          <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            However, my work isn't strictly driven by logic; I also bring a strong creative eye to the table. With hands-on experience in digital design, polished video editing, and visual media production, I approach frontend development from an artist's perspective. This creative background gives me a unique advantage when crafting user interfaces. It allows me to build digital experiences that are not just technically sound beneath the surface, but visually stunning, highly intuitive, and engaging for the end user.
+          </p>
+          <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            Based in Nepal, I am constantly inspired by the vibrant intersection of technology and art, and I am eager to bring this unique perspective to a broader stage. I am currently seeking software engineering internships, freelance full-stack projects, and creative collaborations where I can fully leverage my blend of code and design. If you are building something exciting and need a developer who cares as much about the user experience as the underlying codebase, I would love to connect.
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
           <div>

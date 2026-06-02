@@ -110,9 +110,14 @@ export default function Contact() {
       <main className="flex-grow">
         <section className="max-w-4xl mx-auto px-6 py-16">
           <h2 className="text-4xl font-bold mb-4 text-center">Get In Touch</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 text-center mb-12">
-            I'd love to hear from you. Feel free to reach out via email or connect on social media!
-          </p>
+          <div className="max-w-3xl mx-auto text-lg text-gray-600 dark:text-gray-400 text-center mb-12 space-y-4">
+            <p>
+              Whether you are a recruiter looking for a dedicated full-stack engineer, or a client in need of a custom website and polished visual media, I would love to hear from you.
+            </p>
+            <p>
+              I am currently open to full-time roles, freelance projects, and creative collaborations. Drop me an email below or connect with me on social media, and let's turn your vision into reality!
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             {/* Contact Info */}

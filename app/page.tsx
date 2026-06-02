@@ -32,10 +32,10 @@ export default function Home() {
             Hi, I'm Jikesh
           </h1>
           <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
-            I'm a passionate Computer Science student. I enjoy creating beautiful websites, mastering programming languages, and exploring cutting-edge technologies.
+            A Computer Science student bridging the gap between logic and design.
           </p>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed font-medium">
-            I build maintainable full-stack applications and produce professional visual media. From writing scalable code to editing polished video, I focus on delivering a complete digital experience.
+            I build scalable, maintainable full-stack applications and craft polished visual media to deliver seamless, end-to-end digital experiences.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="/contact" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1">
