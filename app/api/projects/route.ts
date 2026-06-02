@@ -53,13 +53,14 @@ export async function POST(request: Request) {
       const sql = getSQL();
       
       const rows = await sql`
-        INSERT INTO projects (title, description, tech, link, github)
+        INSERT INTO projects (title, description, tech, link, github, category)
         VALUES (
           ${newProject.title},
           ${newProject.description},
           ${newProject.tech || []},
           ${newProject.link || '#'},
-          ${newProject.github || '#'}
+          ${newProject.github || '#'},
+          ${newProject.category || 'code'}
         )
         RETURNING *
       `;
@@ -141,7 +142,8 @@ export async function PUT(request: Request) {
             description = ${updatedProject.description},
             tech = ${updatedProject.tech || []},
             link = ${updatedProject.link || '#'},
-            github = ${updatedProject.github || '#'}
+            github = ${updatedProject.github || '#'},
+            category = ${updatedProject.category || 'code'}
         WHERE id = ${id}
         RETURNING *
       `;

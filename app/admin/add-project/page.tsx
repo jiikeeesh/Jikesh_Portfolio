@@ -15,6 +15,7 @@ export default function AddProjectPage() {
     tech: "",
     link: "",
     github: "",
+    category: "code",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,6 +38,7 @@ export default function AddProjectPage() {
         tech: techArray,
         link: formData.link || "#",
         github: formData.github || "#",
+        category: formData.category,
       };
 
       const res = await fetch("/api/projects", {
@@ -58,6 +60,7 @@ export default function AddProjectPage() {
         tech: "",
         link: "",
         github: "",
+        category: "code",
       });
 
       setTimeout(() => {
@@ -145,6 +148,22 @@ export default function AddProjectPage() {
                 placeholder="e.g. React, Next.js, Tailwind CSS"
               />
               <p className="text-xs text-gray-500">Separate each technology with a comma.</p>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Category
+              </label>
+              <select
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={(e: any) => handleChange(e)}
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              >
+                <option value="code">Code & Logic</option>
+                <option value="creative">Design & Visuals</option>
+              </select>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

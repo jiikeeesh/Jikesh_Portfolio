@@ -64,7 +64,7 @@ export default function Projects() {
             <button
               onClick={() => setActiveTab('code')}
               className={`relative z-10 px-8 py-3 rounded-full font-semibold transition-all duration-300 ${
-                activeTab === 'code' ? 'text-white' : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'
+                activeTab === 'code' ? 'text-white dark:text-black' : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'
               }`}
             >
               Code & Logic
@@ -72,7 +72,7 @@ export default function Projects() {
             <button
               onClick={() => setActiveTab('creative')}
               className={`relative z-10 px-8 py-3 rounded-full font-semibold transition-all duration-300 ${
-                activeTab === 'creative' ? 'text-white' : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'
+                activeTab === 'creative' ? 'text-white dark:text-black' : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'
               }`}
             >
               Design & Visuals

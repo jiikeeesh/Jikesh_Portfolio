@@ -45,9 +45,11 @@ export async function ensureTables() {
       description TEXT NOT NULL,
       tech TEXT[] DEFAULT '{}',
       link TEXT DEFAULT '#',
-      github TEXT DEFAULT '#'
+      github TEXT DEFAULT '#',
+      category TEXT DEFAULT 'code'
     )
   `;
+  await sql`ALTER TABLE projects ADD COLUMN IF NOT EXISTS category TEXT DEFAULT 'code'`;
   await sql`
     CREATE TABLE IF NOT EXISTS products (
       id SERIAL PRIMARY KEY,

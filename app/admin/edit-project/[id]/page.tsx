@@ -11,6 +11,7 @@ interface Project {
   tech: string[];
   link: string;
   github: string;
+  category?: string;
 }
 
 export default function EditProjectPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
@@ -28,6 +29,7 @@ export default function EditProjectPage({ params: paramsPromise }: { params: Pro
     tech: [],
     link: "",
     github: "",
+    category: "code",
   });
 
   const [techInput, setTechInput] = useState("");
@@ -160,6 +162,19 @@ export default function EditProjectPage({ params: paramsPromise }: { params: Pro
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-transparent focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="e.g. React, Next.js, Tailwind CSS"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Category</label>
+              <select
+                required
+                value={formData.category || "code"}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-transparent focus:ring-2 focus:ring-blue-500 outline-none"
+              >
+                <option value="code">Code & Logic</option>
+                <option value="creative">Design & Visuals</option>
+              </select>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
