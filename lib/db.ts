@@ -46,10 +46,21 @@ export async function ensureTables() {
       tech TEXT[] DEFAULT '{}',
       link TEXT DEFAULT '#',
       github TEXT DEFAULT '#',
-      category TEXT DEFAULT 'code'
+      categories TEXT[] DEFAULT '{code}',
+      visible BOOLEAN DEFAULT TRUE
     )
   `;
-  await sql`ALTER TABLE projects ADD COLUMN IF NOT EXISTS category TEXT DEFAULT 'code'`;
+  await sql`ALTER TABLE projects ADD COLUMN IF NOT EXISTS visible BOOLEAN DEFAULT TRUE`;
+  // Migrate: add categories column if not present
+  await sql`ALTER TABLE projects ADD COLUMN IF NOT EXISTS categories TEXT[] DEFAULT '{code}'`;
+  // Migrate: if legacy 'category' column still exists, populate 'categories' from it then drop
+  try {
+    await sql`
+      UPDATE projects
+      SET categories = ARRAY[category]
+      WHERE categories IS NULL OR categories = '{}'
+    `;
+  } catch (_) { /* category column may not exist, that's fine */ }
   await sql`
     CREATE TABLE IF NOT EXISTS products (
       id SERIAL PRIMARY KEY,

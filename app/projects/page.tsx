@@ -11,7 +11,8 @@ interface Project {
   tech: string[];
   link: string;
   github: string;
-  category?: 'code' | 'creative';
+  categories?: string[];
+  category?: string; // legacy
 }
 
 export default function Projects() {
@@ -35,10 +36,15 @@ export default function Projects() {
     fetchProjects();
   }, []);
 
-  // For the sake of the new layout, we will classify projects.
-  // Since the DB might not have 'category' yet, we fallback to checking tech/title.
-  const codeProjects = projects.filter(p => p.category === 'code' || !p.category && !p.tech.includes('Design'));
-  const creativeProjects = projects.filter(p => p.category === 'creative' || (!p.category && p.tech.includes('Design')));
+  // Normalise: support both legacy `category` string and new `categories` array
+  const getCategories = (p: Project): string[] => {
+    if (p.categories && p.categories.length > 0) return p.categories;
+    if (p.category) return [p.category];
+    return ['code'];
+  };
+
+  const codeProjects = projects.filter((p) => getCategories(p).includes('code'));
+  const creativeProjects = projects.filter((p) => getCategories(p).includes('creative'));
 
   const displayedProjects = activeTab === 'code' ? codeProjects : creativeProjects;
 

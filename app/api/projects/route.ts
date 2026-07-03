@@ -27,12 +27,17 @@ async function saveProjectsLocal(projects: any) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const showAll = searchParams.get('all') === 'true';
+
   if (usePostgres()) {
     try {
       await ensureTables();
       const sql = getSQL();
-      const rows = await sql`SELECT * FROM projects ORDER BY id ASC`;
+      const rows = showAll
+        ? await sql`SELECT * FROM projects ORDER BY id ASC`
+        : await sql`SELECT * FROM projects WHERE visible = TRUE ORDER BY id ASC`;
       return NextResponse.json(rows);
     } catch (e) {
       console.error("Postgres get projects error:", e);
@@ -40,7 +45,8 @@ export async function GET() {
     }
   } else {
     const projects = await getProjectsLocal();
-    return NextResponse.json(projects);
+    if (showAll) return NextResponse.json(projects);
+    return NextResponse.json(projects.filter((p: any) => p.visible !== false));
   }
 }
 
@@ -53,14 +59,15 @@ export async function POST(request: Request) {
       const sql = getSQL();
       
       const rows = await sql`
-        INSERT INTO projects (title, description, tech, link, github, category)
+        INSERT INTO projects (title, description, tech, link, github, categories, visible)
         VALUES (
           ${newProject.title},
           ${newProject.description},
           ${newProject.tech || []},
           ${newProject.link || '#'},
           ${newProject.github || '#'},
-          ${newProject.category || 'code'}
+          ${newProject.categories || ['code']},
+          ${newProject.visible !== false}
         )
         RETURNING *
       `;
@@ -68,7 +75,11 @@ export async function POST(request: Request) {
     } else {
       const projects = await getProjectsLocal();
       const maxId = projects.length > 0 ? Math.max(...projects.map((p: any) => p.id)) : 0;
-      const projectWithId = { ...newProject, id: maxId + 1 };
+      const projectWithId = {
+        ...newProject,
+        id: maxId + 1,
+        categories: newProject.categories || ['code'],
+      };
       projects.push(projectWithId);
       const success = await saveProjectsLocal(projects);
       if (success) {
@@ -143,7 +154,8 @@ export async function PUT(request: Request) {
             tech = ${updatedProject.tech || []},
             link = ${updatedProject.link || '#'},
             github = ${updatedProject.github || '#'},
-            category = ${updatedProject.category || 'code'}
+            categories = ${updatedProject.categories || ['code']},
+            visible = ${updatedProject.visible !== false}
         WHERE id = ${id}
         RETURNING *
       `;
@@ -173,3 +185,45 @@ export async function PUT(request: Request) {
   }
 }
 
+export async function PATCH(request: Request) {
+  try {
+    const { id, visible } = await request.json();
+
+    if (!id) {
+      return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
+    }
+
+    if (usePostgres()) {
+      await ensureTables();
+      const sql = getSQL();
+      const rows = await sql`
+        UPDATE projects
+        SET visible = ${visible}
+        WHERE id = ${id}
+        RETURNING *
+      `;
+      if (rows.length === 0) {
+        return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+      }
+      return NextResponse.json(rows[0]);
+    } else {
+      const projects = await getProjectsLocal();
+      const index = projects.findIndex((p: any) => p.id === id);
+
+      if (index === -1) {
+        return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+      }
+
+      projects[index] = { ...projects[index], visible };
+      const success = await saveProjectsLocal(projects);
+      if (success) {
+        return NextResponse.json(projects[index]);
+      } else {
+        throw new Error('Failed to save to database file.');
+      }
+    }
+  } catch (error: any) {
+    console.error('Error toggling project visibility:', error);
+    return NextResponse.json({ error: 'Failed to update visibility', details: error.message }, { status: 500 });
+  }
+}
