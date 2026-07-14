@@ -1,6 +1,6 @@
 @import "tailwindcss";
-/* Dark mode: responds to BOTH next-themes .dark class AND the OS media query */
-@custom-variant dark (&:where(.dark, .dark *), @media (prefers-color-scheme: dark));
+/* Dark mode: responds to next-themes .dark class only (next-themes handles OS preference) */
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ─── Light Mode Color Tokens ─────────────────────────────────────── */
 :root {
@@ -46,26 +46,7 @@
   --neu-shadow-dark:  #0d0d12;
 }
 
-/* ─── System-level dark mode (before JS hydrates / no .dark class yet) ── */
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) {
-    --background: #1a1a1f;
-    --surface:    #222228;
-    --foreground: #ededed;
 
-    --text-primary:   #fafafa;
-    --text-secondary: #a1a1aa;
-    --text-muted:     #71717a;
-
-    --accent:        #3b82f6;
-    --accent-hover:  #60a5fa;
-
-    --border:        #2e2e36;
-
-    --neu-shadow-light: #252530;
-    --neu-shadow-dark:  #0d0d12;
-  }
-}
 
 @theme inline {
   --color-background: var(--background);
