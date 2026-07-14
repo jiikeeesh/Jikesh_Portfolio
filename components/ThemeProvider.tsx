@@ -13,6 +13,9 @@ export default function ThemeProvider({ children }: Props) {
       attribute="class"
       defaultTheme="system"
       enableSystem
+      // When theme = "light", add class "light" so :root:not(.light) stops
+      // the media-query dark variables from activating on light-forced pages.
+      value={{ light: "light", dark: "dark" }}
       disableTransitionOnChange={false}
     >
       {children}

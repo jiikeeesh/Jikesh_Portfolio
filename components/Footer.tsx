@@ -2,18 +2,24 @@ import ThemeToggle from "./ThemeToggle";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-200 dark:border-gray-800 py-12 px-6 text-center text-gray-600 dark:text-gray-400 mt-auto">
+    <footer className="neu-surface py-12 px-6 text-center text-gray-600 dark:text-gray-400 mt-auto">
       <div className="max-w-4xl mx-auto">
         {/* Social Links */}
-        <div className="flex flex-wrap justify-center gap-6 md:gap-8 mb-6">
-          <a href="mailto:jiikeeeshphotography@gmail.com" className="hover:text-blue-600 dark:hover:text-blue-400 transition flex flex-col items-center font-semibold">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-8 mb-8">
+          <a
+            href="mailto:jiikeeeshphotography@gmail.com"
+            className="neu-icon-btn rounded-2xl px-6 py-4 flex flex-col items-center font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+          >
             <svg className="w-10 h-10 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
             </svg>
             Email
           </a>
-          <a href="https://www.instagram.com/jiikeeesh/" className="hover:text-blue-600 dark:hover:text-blue-400 transition flex flex-col items-center font-semibold">
+          <a
+            href="https://www.instagram.com/jiikeeesh/"
+            className="neu-icon-btn rounded-2xl px-6 py-4 flex flex-col items-center font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+          >
             <svg className="w-10 h-10 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"/>
@@ -21,7 +27,10 @@ export default function Footer() {
             </svg>
             Instagram
           </a>
-          <a href="https://github.com/jiikeeesh" className="hover:text-blue-600 dark:hover:text-blue-400 transition flex flex-col items-center font-semibold">
+          <a
+            href="https://github.com/jiikeeesh"
+            className="neu-icon-btn rounded-2xl px-6 py-4 flex flex-col items-center font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+          >
             <svg className="w-10 h-10 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
             </svg>
@@ -30,7 +39,7 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-gray-100 dark:border-gray-800/60 mb-5" />
+        <div className="h-px bg-[var(--border)] mb-6 opacity-60" />
 
         {/* Bottom row: copyright + theme toggle */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">

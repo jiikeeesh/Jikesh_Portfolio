@@ -17,7 +17,7 @@ export default function ThemeToggle() {
     return (
       <div className="flex items-center gap-3 opacity-0 pointer-events-none select-none" aria-hidden="true">
         <span className="text-sm font-medium">Theme</span>
-        <div className="w-14 h-7 rounded-full bg-gray-200 dark:bg-gray-700" />
+        <div className="w-14 h-7 rounded-full neu-inset" />
       </div>
     );
   }
@@ -44,31 +44,25 @@ export default function ThemeToggle() {
         <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
       </svg>
 
-      {/* The Toggle Track */}
+      {/* The Toggle Track — neumorphic inset trough */}
       <button
         id="theme-toggle"
         role="switch"
         aria-checked={isDark}
         aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
         onClick={toggle}
-        className={`
-          relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full
-          border-2 border-transparent
-          transition-colors duration-300 ease-in-out
-          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
-          focus-visible:ring-offset-white dark:focus-visible:ring-offset-black
-          ${isDark
-            ? "bg-indigo-600 hover:bg-indigo-500"
-            : "bg-gray-300 hover:bg-gray-400"
-          }
-        `}
+        className="relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full neu-inset focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
       >
-        {/* The Sliding Thumb */}
+        {/* The Sliding Thumb — neumorphic raised pill */}
         <span
           className={`
-            pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-md
-            transform transition-transform duration-300 ease-in-out
-            ${isDark ? "translate-x-7" : "translate-x-0"}
+            pointer-events-none inline-block h-5 w-5 rounded-full
+            transform transition-all duration-300 ease-in-out
+            shadow-[3px_3px_7px_var(--neu-shadow-dark),-3px_-3px_7px_var(--neu-shadow-light)]
+            ${isDark
+              ? "translate-x-7 bg-indigo-400"
+              : "translate-x-1 bg-white"
+            }
           `}
         />
       </button>

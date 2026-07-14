@@ -1,40 +1,70 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
+/* Dark mode: responds to BOTH next-themes .dark class AND the OS media query */
+@custom-variant dark (&:where(.dark, .dark *), @media (prefers-color-scheme: dark));
 
 /* ─── Light Mode Color Tokens ─────────────────────────────────────── */
 :root {
-  /* Core surfaces */
-  --background: #ffffff;
-  --surface:    #f4f4f5;      /* Cards, inputs */
-  --foreground: #171717;
+  /* Core surfaces — tuned for Neumorphism (soft off-white) */
+  --background: #f0f0f3;
+  --surface:    #e8e8ec;
+  --foreground: #1d1d20;
 
   /* Text hierarchy */
   --text-primary:   #111111;
-  --text-secondary: #52525b;  /* Zinc-600 */
-  --text-muted:     #a1a1aa;  /* Zinc-400 */
+  --text-secondary: #52525b;
+  --text-muted:     #a1a1aa;
 
   /* Accents */
-  --accent:        #2563eb;   /* Blue-600 */
+  --accent:        #2563eb;
   --accent-hover:  #1d4ed8;
 
   /* Borders */
-  --border:        #e4e4e7;
+  --border:        #d8d8de;
+
+  /* ─── Neumorphic Shadow Tokens ── */
+  --neu-shadow-light: #ffffff;
+  --neu-shadow-dark:  #c4c4cc;
 }
 
 /* ─── Dark Mode Color Tokens ──────────────────────────────────────── */
 .dark {
-  --background: #0a0a0a;
-  --surface:    #18181b;      /* Zinc-900 */
+  --background: #1a1a1f;
+  --surface:    #222228;
   --foreground: #ededed;
 
   --text-primary:   #fafafa;
-  --text-secondary: #a1a1aa;  /* Zinc-400 */
-  --text-muted:     #71717a;  /* Zinc-500 */
+  --text-secondary: #a1a1aa;
+  --text-muted:     #71717a;
 
-  --accent:        #3b82f6;   /* Blue-500 */
+  --accent:        #3b82f6;
   --accent-hover:  #60a5fa;
 
-  --border:        #27272a;   /* Zinc-800 */
+  --border:        #2e2e36;
+
+  /* ─── Neumorphic Shadow Tokens ── */
+  --neu-shadow-light: #252530;
+  --neu-shadow-dark:  #0d0d12;
+}
+
+/* ─── System-level dark mode (before JS hydrates / no .dark class yet) ── */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --background: #1a1a1f;
+    --surface:    #222228;
+    --foreground: #ededed;
+
+    --text-primary:   #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted:     #71717a;
+
+    --accent:        #3b82f6;
+    --accent-hover:  #60a5fa;
+
+    --border:        #2e2e36;
+
+    --neu-shadow-light: #252530;
+    --neu-shadow-dark:  #0d0d12;
+  }
 }
 
 @theme inline {
@@ -66,8 +96,207 @@ button,
     background-color 150ms ease,
     border-color     150ms ease,
     color            150ms ease,
-    box-shadow       150ms ease,
+    box-shadow       200ms ease,
     opacity          150ms ease,
-    transform        150ms ease;
+    transform        200ms ease;
 }
 
+/* ═══════════════════════════════════════════════════════════════════ */
+/* ═══ Neumorphic Utility Classes ══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Raised: element extrudes from the page surface ── */
+.neu-raised {
+  background: var(--background);
+  box-shadow:
+    6px 6px 14px var(--neu-shadow-dark),
+    -6px -6px 14px var(--neu-shadow-light);
+  border: none;
+}
+
+.neu-raised:hover {
+  box-shadow:
+    9px 9px 20px var(--neu-shadow-dark),
+    -9px -9px 20px var(--neu-shadow-light);
+}
+
+/* ── Inset: element is pressed into the surface (inputs, troughs) ── */
+.neu-inset {
+  background: var(--background);
+  box-shadow:
+    inset 4px 4px 10px var(--neu-shadow-dark),
+    inset -4px -4px 10px var(--neu-shadow-light);
+  border: none;
+}
+
+/* Accent ring on focus for inset elements (e.g., inputs) */
+.neu-inset:focus,
+.neu-inset:focus-within {
+  outline: none;
+  box-shadow:
+    inset 4px 4px 10px var(--neu-shadow-dark),
+    inset -4px -4px 10px var(--neu-shadow-light),
+    0 0 0 2.5px var(--accent);
+}
+
+/* ── Flat: barely raised, subtle — for chips/badges ── */
+.neu-flat {
+  background: var(--background);
+  box-shadow:
+    3px 3px 7px var(--neu-shadow-dark),
+    -3px -3px 7px var(--neu-shadow-light);
+  border: none;
+}
+
+/* ── Surface: for full-width nav/footer (no border-radius) ── */
+.neu-surface {
+  background: var(--background);
+  box-shadow:
+    0 4px 12px var(--neu-shadow-dark),
+    0 -2px 8px var(--neu-shadow-light);
+}
+
+/* ── Accent Button: blue CTA that lifts on hover ── */
+.neu-btn-accent {
+  background: var(--accent);
+  color: #ffffff;
+  display: inline-block;
+  box-shadow:
+    4px 4px 12px var(--neu-shadow-dark),
+    -4px -4px 12px var(--neu-shadow-light);
+}
+
+.neu-btn-accent:hover {
+  background: var(--accent-hover);
+  box-shadow:
+    7px 7px 18px var(--neu-shadow-dark),
+    -7px -7px 18px var(--neu-shadow-light);
+  transform: translateY(-2px);
+}
+
+.neu-btn-accent:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 2px 2px 6px rgba(0, 0, 0, 0.3),
+    -2px -2px 6px var(--neu-shadow-light);
+}
+
+/* ── Secondary Button: surface-tone, lifted ── */
+.neu-btn-secondary {
+  background: var(--background);
+  color: var(--text-primary);
+  display: inline-block;
+  box-shadow:
+    4px 4px 12px var(--neu-shadow-dark),
+    -4px -4px 12px var(--neu-shadow-light);
+}
+
+.neu-btn-secondary:hover {
+  box-shadow:
+    7px 7px 18px var(--neu-shadow-dark),
+    -7px -7px 18px var(--neu-shadow-light);
+  transform: translateY(-2px);
+}
+
+.neu-btn-secondary:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 2px 2px 6px var(--neu-shadow-dark),
+    inset -2px -2px 6px var(--neu-shadow-light);
+}
+
+/* ── Icon Button: for social/action icons ── */
+.neu-icon-btn {
+  background: var(--background);
+  box-shadow:
+    4px 4px 10px var(--neu-shadow-dark),
+    -4px -4px 10px var(--neu-shadow-light);
+}
+
+.neu-icon-btn:hover {
+  box-shadow:
+    6px 6px 16px var(--neu-shadow-dark),
+    -6px -6px 16px var(--neu-shadow-light);
+  transform: translateY(-3px);
+}
+
+.neu-icon-btn:active {
+  box-shadow:
+    inset 3px 3px 8px var(--neu-shadow-dark),
+    inset -3px -3px 8px var(--neu-shadow-light);
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════════ */
+/* ═══ Floating Island Navbar — 5-State System ═════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════ */
+
+/* ① THE ISLAND — Detached, heavily-rounded, extruded above the page */
+.neu-nav-island {
+  background: var(--background);
+  border-radius: 20px;
+  box-shadow:
+    10px 10px 28px var(--neu-shadow-dark),
+    -10px -10px 28px var(--neu-shadow-light);
+}
+
+/* ② RESTING FLAT — Zero shadow; link is flush with island material */
+.neu-nav-link {
+  background: transparent;
+  border-radius: 10px;
+  box-shadow: none;
+  transition: box-shadow 200ms ease, transform 200ms ease, color 150ms ease;
+}
+
+/* ③ CONVEX LIFT — Hover gently raises the link out of the surface */
+.neu-nav-link:hover {
+  box-shadow:
+    4px 4px 10px var(--neu-shadow-dark),
+    -4px -4px 10px var(--neu-shadow-light);
+  transform: translateY(-1px);
+}
+
+/* ④ CONCAVE INSET — Active page link is carved into the material */
+.neu-nav-link-active {
+  background: var(--background);
+  border-radius: 10px;
+  box-shadow:
+    inset 3px 3px 8px var(--neu-shadow-dark),
+    inset -3px -3px 8px var(--neu-shadow-light);
+  /* Override hover: active item should never lift */
+  transition: none;
+}
+
+/* Ensure hover on active does NOT lift the inset */
+.neu-nav-link-active:hover {
+  box-shadow:
+    inset 3px 3px 8px var(--neu-shadow-dark),
+    inset -3px -3px 8px var(--neu-shadow-light);
+  transform: none;
+}
+
+/* ⑤ RAISED PILL CTA — Always extruded; accent text demands attention */
+.neu-nav-cta {
+  background: var(--background);
+  border-radius: 9999px;
+  color: var(--accent);
+  font-weight: 700;
+  box-shadow:
+    5px 5px 12px var(--neu-shadow-dark),
+    -5px -5px 12px var(--neu-shadow-light);
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.neu-nav-cta:hover {
+  box-shadow:
+    8px 8px 18px var(--neu-shadow-dark),
+    -8px -8px 18px var(--neu-shadow-light);
+  transform: translateY(-2px);
+}
+
+.neu-nav-cta:active {
+  box-shadow:
+    inset 3px 3px 7px var(--neu-shadow-dark),
+    inset -3px -3px 7px var(--neu-shadow-light);
+  transform: translateY(0);
+}

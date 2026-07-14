@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
       <Navigation />
 
       {/* Hero Section */}
@@ -21,27 +21,33 @@ export default function Home() {
             />
           </div>
           {/* Subtle Color Overlay to improve text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-white dark:from-black/20 dark:to-black"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/20 to-[var(--background)]"></div>
         </div>
         {/* Subtle Glow Effect */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] md:w-[700px] md:h-[700px] bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-[80px] -z-20"></div>
 
         {/* Text Content */}
         <div className="max-w-3xl relative z-10">
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-b from-black to-gray-500 dark:from-white dark:to-gray-400">
-            Hi, I'm Jikesh
+          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-b from-[var(--text-primary)] to-[var(--text-secondary)]">
+            Hi, I&apos;m Jikesh
           </h1>
-          <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
+          <p className="text-xl md:text-2xl text-[var(--text-secondary)] mb-8 leading-relaxed">
             A Computer Science student bridging the gap between logic and design.
           </p>
-          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed font-medium">
+          <p className="text-lg md:text-xl text-[var(--text-muted)] mb-10 leading-relaxed font-medium">
             I build scalable, maintainable full-stack applications and craft polished visual media to deliver seamless, end-to-end digital experiences.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/contact" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1">
+            <a
+              href="/contact"
+              className="neu-btn-accent font-bold py-4 px-10 rounded-xl"
+            >
               Get in Touch
             </a>
-            <a href="/projects" className="inline-block bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-black dark:text-white font-bold py-4 px-10 rounded-xl transition-all">
+            <a
+              href="/projects"
+              className="neu-btn-secondary font-bold py-4 px-10 rounded-xl"
+            >
               Show Projects
             </a>
           </div>

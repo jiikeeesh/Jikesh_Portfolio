@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Navigation from "../../../components/Navigation";
 import Footer from "../../../components/Footer";
 
-export default function AdminLogin() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,8 +26,8 @@ export default function AdminLogin() {
       });
 
       if (res.ok) {
-        // Redirect to manage products on successful login
-        router.push("/admin/manage-projects");
+        const from = searchParams.get("from") || "/admin/manage-projects";
+        router.push(from);
         router.refresh();
       } else {
         const data = await res.json();
@@ -40,29 +41,29 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-black text-black dark:text-white">
+    <div className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--text-primary)]">
       <Navigation />
 
       <main className="flex-grow flex items-center justify-center px-6 py-20">
-        <div className="w-full max-w-md bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xl overflow-hidden p-8">
+        <div className="w-full max-w-md neu-raised rounded-2xl overflow-hidden p-8">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
               Admin Login
             </h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-[var(--text-secondary)]">
               Sign in to access the control panel.
             </p>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm text-center">
+            <div className="mb-6 p-4 neu-inset rounded-xl text-red-500 text-sm text-center">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                 Username
               </label>
               <input
@@ -70,13 +71,13 @@ export default function AdminLogin() {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 rounded-xl neu-inset text-[var(--text-primary)] placeholder-[var(--text-muted)] bg-[var(--background)]"
                 placeholder="Enter username"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                 Password
               </label>
               <input
@@ -84,7 +85,7 @@ export default function AdminLogin() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 rounded-xl neu-inset text-[var(--text-primary)] placeholder-[var(--text-muted)] bg-[var(--background)]"
                 placeholder="Enter password"
               />
             </div>
@@ -92,13 +93,11 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-4 px-6 rounded-xl font-bold text-white shadow-lg transition-all
-                ${
-                  loading
-                    ? "bg-blue-400 cursor-not-allowed"
-                    : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1 transform"
-                }
-              `}
+              className={`w-full py-4 px-6 rounded-xl font-bold transition-all duration-200 mt-2 ${
+                loading
+                  ? "opacity-50 cursor-not-allowed neu-flat text-[var(--text-muted)]"
+                  : "neu-btn-accent"
+              }`}
             >
               {loading ? "Signing in..." : "Sign In"}
             </button>
@@ -108,5 +107,13 @@ export default function AdminLogin() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function AdminLogin() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[var(--background)]">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }
